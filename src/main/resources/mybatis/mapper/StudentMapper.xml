@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hhy.coursemanage.mapper.StudentMapper">
+
+    <resultMap id="StudentResultMap" type="com.hhy.coursemanage.entity.Student">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="hours" property="hours"/>
+        <result column="sid" property="sid"/>
+        <result column="headurl" property="headurl"/>
+    </resultMap>
+
+    <sql id="InsertSQL">
+        name,hours,sid
+    </sql>
+
+    <sql id="AllSQL">
+        id,name,hours,sid
+    </sql>
+
+    <insert id="insertStudent" parameterType="Student">
+        insert into s_student(<include refid="InsertSQL"/>) values (#{name},#{hours},#{sid})
+    </insert>
+
+    <select id="selectById" resultType="Student">
+        select <include refid="AllSQL"></include>
+        from s_student
+        where id=#{id}
+    </select>
+
+    <select id="selectStudentBySid" resultType="Student" resultMap="StudentResultMap">
+        select <include refid="AllSQL"></include>
+        from s_student
+        where sid=#{sid}
+    </select>
+
+    <update id="updateHours">
+        update s_student set hours = #{hours} where id = #{id}
+    </update>
+
+    <select id="findAllStudent" resultType="Student" resultMap="StudentResultMap">
+        select * from s_student;
+    </select>
+
+    <update id="update">
+        update s_student
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="hours != null">
+                hours = #{hours},
+            </if>
+            <if test="sid != null">
+                sid = #{sid}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from s_student where id = #{id}
+    </delete>
+
+    <update id="updateHeadUrl">
+        update s_student set headurl = #{headurl} where id = #{id}
+    </update>
+
+</mapper>
